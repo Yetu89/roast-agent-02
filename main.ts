@@ -129,6 +129,12 @@ function validate(text: string): void {
   if (/[\u0000-\u001F\u007F]/.test(text)) {
     throw new Error("entry contains control characters");
   }
+  // Invisible Unicode whitespace (non-breaking space, zero-width space,
+  // zero-width joiner) survives trim() but would still count toward the
+  // 200-character limit and confuse the judge, so it is rejected here.
+  if (/[\u00A0\u200B\u200C\u200D\uFEFF]/.test(text)) {
+    throw new Error("entry contains invisible Unicode whitespace");
+  }
 }
 
 function main(): void {
